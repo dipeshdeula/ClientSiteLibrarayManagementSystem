@@ -1,0 +1,14 @@
+﻿@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+    }
+
+    .right-side {
+        border-radius: 50px 50px 0 0;
+        padding: 3rem 2rem;
+    }
+
+    .left-side {
+        padding: 3rem 2rem;
+    }
+}

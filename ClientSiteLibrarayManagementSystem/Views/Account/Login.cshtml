@@ -1,0 +1,166 @@
+﻿@model ClientSiteLibrarayManagementSystem.Models.User
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSMSS Library Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/css/responsive.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --primary-blue: #2B5876;
+            --light-gray: #f0f0f0;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .left-side {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: white;
+        }
+
+        .right-side {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-blue);
+            border-top-left-radius: 50px;
+            border-bottom-left-radius: 50px;
+            color: white;
+        }
+
+        .book-logo {
+            width: 100px;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        .right-side .book-logo {
+            filter: brightness(0) invert(0.9);
+            opacity: 0.9;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-form {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .form-control {
+            background-color: var(--light-gray);
+            border: none;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border-radius: 25px;
+        }
+
+        .btn-login {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .btn-login:hover {
+            opacity: 0.9;
+        }
+
+        .btn-register {
+            background-color: var(--light-gray);
+            color: var(--primary-blue);
+            border: none;
+            padding: 0.8rem 3rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+            font-weight: 500;
+        }
+
+        .btn-register:hover {
+            opacity: 0.9;
+        }
+
+        .forgot-password {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .right-side-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .register-text {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .book-img-size
+        {
+            width:344px;
+            height:234px;
+        }
+        </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="left-side">
+            <img src="~/Images/BookImg.png" alt="Book Logo" class="book-logo book-img-size">
+            <h1 class="form-title">HSMSS Library Management System</h1>
+           @*  <p class="mb-4">Please enter your credential</p> *@
+            
+            <form class="login-form" asp-action="Login" enctype="multipart/form-data" method="post">
+                <input type="text" class="form-control" placeholder="Username" name="UserName" required>
+                <input type="password" class="form-control" placeholder="Password" name="Password" required>
+                <a href="#" class="forgot-password">Forgot Password?</a>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-login">Log In</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="right-side">
+            <img src="~/Images/BookImg.png" alt="Book Logo" class="book-logo text-white book-img-size ">
+            <h2 class="right-side-title">HSMSS Library</h2>
+            <p class="register-text">New to our platform?</p>
+            <p class="register-text mb-4">Register Now</p>
+            <button class="btn btn-register">Register</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
