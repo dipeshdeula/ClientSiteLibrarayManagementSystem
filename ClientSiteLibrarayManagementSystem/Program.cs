@@ -1,7 +1,6 @@
 using ClientSiteLibrarayManagementSystem.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Logging.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
@@ -22,8 +21,12 @@ namespace ClientSiteLibrarayManagementSystem
             builder.Services.AddControllersWithViews();
 
             //Authentication dependency
-            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
-                options => options.LoginPath = "/Account/Login");
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+              .AddCookie(options =>
+              {
+                  options.LoginPath = "/Account/Login";
+                  options.AccessDeniedPath = "/Account/AccessDenied";
+              });
 
             //Register HttpClient
             builder.Services.AddHttpClient();
@@ -100,12 +103,13 @@ namespace ClientSiteLibrarayManagementSystem
 
             //Enable session middleware before authentication and authorization
             app.UseSession();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Static}/{action=index}/{id?}");
+                pattern: "{controller=Account}/{action=Login}/{id?}");
 
             app.Run();
         }

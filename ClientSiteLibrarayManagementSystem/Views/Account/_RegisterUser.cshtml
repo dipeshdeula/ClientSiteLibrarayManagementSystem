@@ -1,0 +1,57 @@
+﻿@model ClientSiteLibrarayManagementSystem.Dtos.UserDto
+
+<div class="form-section">
+    <h2>Add User</h2>
+    <form asp-controller="Account" asp-action="RegisterUser" method="post" enctype="multipart/form-data" id="UserForm">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly"></div>
+
+        <div class="form-group">
+            <label for="Id">User Id</label>
+            <input type="text" class="form-control" id="id" name="Id" asp-for="UserID" required />
+        </div>
+
+        <div class="form-group">
+            <label for="Name">Username</label>
+            <input type="text" class="form-control" id="name" name="UserName" asp-for="UserName" required>
+        </div>
+
+        <div class="form-group">
+            <label for="Email">Email</label>
+            <input type="text" class="form-control" id="email" name="Email" asp-for="Email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="Password" asp-for="Password" required>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="text" class="form-control" id="phone" name="Phone" asp-for="Phone" required>
+        </div>
+
+
+        <div class="form-group">
+            <label for="FullName">Full Name</label>
+            <input type="text" class="form-control" id="fullName" name="fullName" asp-for="FullName" required>
+        </div>
+
+        <div class="form-group">
+            <label for="role">Role</label>
+            <input type="text" class="form-control" id="role" name="role" asp-for="Role" required>
+        </div>
+
+
+        <div class="form-group">
+            <label for="imageFile">User Image</label>
+            <input type="file" class="form-control" id="imageFile" name="imageFile" asp-for="UserProfile">
+            @if (!string.IsNullOrEmpty(Model?.UserProfile))
+            {
+                <img src="https://localhost:7116/api/Users/GetUserImage?fileName=@Model.UserProfile" alt="User Image" class="img-thumbnail" style="max-width: 100px;" />
+            }
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Register</button>
+    </form>
+</div>
