@@ -94,6 +94,10 @@ namespace ClientSiteLibrarayManagementSystem.Services
                 }
             }
 
+            formData.Add(new StringContent(user.UserProfile), "UserProfile");
+
+            _logger.LogInformation("Sending data to API: {@formData}", formData);
+
             var response = await _httpClient.PostAsync("https://localhost:7116/api/Users", formData);
             //return response !=null && response.IsSuccessStatusCode;
 
