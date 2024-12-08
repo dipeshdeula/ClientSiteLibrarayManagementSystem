@@ -1,0 +1,113 @@
+﻿@model AuthorViewModel
+
+@{
+    ViewData["Title"] = "Author Dashboard";
+}
+
+@section Styles{
+    <link href="~/css/Author_Dashboard.css" rel="stylesheet" />
+
+}
+
+<div class="container py-5">
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h2 class="h4 mb-4">Author Info</h2>
+            <h2>@(Model.Author != null ? "Edit Author" : "Add Author")</h2>
+
+            <form asp-action="@(Model.Author !=null? "UpdateAuthors":"AddAuthor")" asp-controller="Author" method="post" enctype="multipart/form-data" id="authorForm">
+               @Html.AntiForgeryToken()
+                <div class="mb-3">
+                    <label asp-for="Author.AuthorId" class="form-label">Author ID</label>
+                    <input asp-for="Author.AuthorId" class="form-control" type="text" id="id" name="AuthorId" required />
+                    
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Author.AuthorName" class="form-label">Author Name</label>
+                    <input asp-for="Author.AuthorName" class="form-control" type="text" id="id" name="AuthorName" required/>
+                    
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Author.Biography" class="form-label">Bio</label>
+                    <textarea asp-for="Author.Biography" class="form-control" name="Biography" rows="3"></textarea>
+                  
+                </div>
+
+
+                <div class="mb-3">
+                    <label asp-for="Author.AuthorProfile" class="form-label">Author Profile</label>
+                    <input type="file" asp-for="Author.AuthorProfile" class="form-control" id="imageFile" name="imageFile" />
+
+                </div>
+
+                <button type="submit" class="btn btn-primary">ADD AUTHOR</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h2 class="h4 mb-4">Author Details</h2>
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th>Author ID</th>
+                            <th>Author Profile</th>
+                            <th>Name</th>
+                            <th>Bio</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="authorGrid">
+                        @foreach (var author in Model.Authors)
+                        {
+                            var imageUrl = $"https://localhost:7116/api/Authors/GetAuthorImage?fileName={author.AuthorProfile}";
+
+                            <tr>
+                                <td>@author.AuthorId</td>
+                                <td>
+                                    <img src="@imageUrl" alt="Author Image" class="img-thumbnail" style="max-width:100px;" />
+                                </td>
+                                <td>@author.AuthorName</td>
+                                <td>@author.Biography</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+
+                                        <form asp-controller="Author" asp-action="AuthorDashboard" asp-route-authorId="@author.AuthorId" method="get">
+                                            <button type="submit" class="btn btn-warning btn-sm">Edit</button>
+                                        </form>
+
+                                        <form asp-controller="Author" asp-action="DeleteAuthor" method="post">
+                                            <input type="hidden" name="Id" value="@author.AuthorId" />
+                                            <button type="submit" class="btn btn-danger btn-sm ms-1"
+                                            onclick="return confirm('Are you sure you want to delete this author?')">Delete</button>
+                                        </form>
+                                      
+                                       @*  <a asp-action="AuthorDelete" asp-route-id="@author.AuthorId"
+                                           class="btn btn-danger btn-sm ms-1"
+                                           onclick="return confirm('Are you sure you want to delete this author?')">
+                                            Delete
+                                        </a> *@
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

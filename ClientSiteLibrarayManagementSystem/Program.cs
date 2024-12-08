@@ -55,6 +55,7 @@ namespace ClientSiteLibrarayManagementSystem
 
             //Register appliation services
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IAuthorService, AuthorService>();
 
 
 

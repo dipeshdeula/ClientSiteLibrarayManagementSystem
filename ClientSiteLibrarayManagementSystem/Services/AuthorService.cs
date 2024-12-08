@@ -33,9 +33,9 @@ namespace ClientSiteLibrarayManagementSystem.Services
             }
             return author;
         }
-        public async Task<bool> AddAuthorAsync(AuthorDto author, IFormFile imageFile)
+        public async Task<bool> AddAuthorAsync(AuthorDto author, IFormFile imageFile,string token)
         {
-            //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             var formData = new MultipartFormDataContent();
             formData.Add(new StringContent(author.AuthorId.ToString()),"AuthorId");
@@ -80,14 +80,61 @@ namespace ClientSiteLibrarayManagementSystem.Services
 
         }
 
-        public Task<bool> DeleteAuthorAsync(int id)
+
+        public async Task<bool> UpdateAuthorAsync(AuthorDto author, IFormFile imageFile,string token)
         {
-            throw new NotImplementedException();
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var formData = new MultipartFormDataContent();
+            formData.Add(new StringContent(author.AuthorId.ToString()), "AuthorId");
+            formData.Add(new StringContent(author.AuthorName), "AuthorName");
+            formData.Add(new StringContent(author.Biography), "Biography");
+
+            if (imageFile != null)
+            {
+                using (var stream = new MemoryStream())
+                {
+                    await imageFile.CopyToAsync(stream);
+                    var imageContent = new ByteArrayContent(stream.ToArray());
+                    imageContent.Headers.ContentType = new MediaTypeHeaderValue(imageFile.ContentType);
+                    formData.Add(imageContent, "AuthorImage", imageFile.FileName);
+
+                    //set the UserProfile property to the file name or path
+                    author.AuthorProfile = imageFile.FileName;
+                }
+            }
+
+
+
+
+
+            formData.Add(new StringContent(author.AuthorProfile), "AuthorProfile");
+
+            _logger.LogInformation("Sending data to API: {@formData}", formData);
+
+            var response = await _httpClient.PutAsync("https://localhost:7116/api/Authors/{author.AuthorId}", formData);
+            //return response !=null && response.IsSuccessStatusCode;
+
+            if (response.IsSuccessStatusCode)
+            {
+                _logger.LogInformation("Author registered successfully.");
+                return true;
+            }
+            else
+            {
+                _logger.LogError($"Failed to register user. Status code: {response.StatusCode}");
+                return false;
+            }
+
+        }
+        public async Task<bool> DeleteAuthorAsync(int id,string token)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _httpClient.DeleteAsync($"https://localhost:7116/api/Authors/{id}");
+
+            return response.IsSuccessStatusCode;
         }
 
-        public Task<bool> UpdateAuthorAsync(AuthorDto author)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }
