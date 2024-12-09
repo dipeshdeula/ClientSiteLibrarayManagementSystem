@@ -101,10 +101,10 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
             return RedirectToAction("AuthorDashboard");
         }
 
-        [HttpPost]
+        [HttpPost("UpdateAuthor")]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> UpdateAuthor(AuthorDto author, IFormFile imageFile)
+        public async Task<IActionResult> UpdateAuthor(AuthorDto author, IFormFile? imageFile)
         {
             var token = _httpContextAccessor.HttpContext.Session.GetString("JWToken");
 
@@ -114,6 +114,16 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
             }
             try
             {
+                // If no new image is uploaded, retain the old image
+                if (imageFile == null)
+                {
+                    var existingAuthor = await _authorService.GetAuthorByIdAsync(author.AuthorId);
+                    if (existingAuthor != null)
+                    {
+                        author.AuthorProfile = existingAuthor.AuthorProfile;
+                    }
+                }
+
                 var result = await _authorService.UpdateAuthorAsync(author, imageFile,token);
 
                 if (result)
@@ -134,7 +144,8 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
                 ModelState.AddModelError("", "An error occured while updating the author");
             }
 
-            return View(author);
+            //return View(author);
+            return RedirectToAction("AuthorDashboard");
         }
 
         [HttpPost("DeleteAuthor")]

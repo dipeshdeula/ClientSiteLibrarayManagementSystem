@@ -24,7 +24,7 @@
             <h2 class="h4 mb-4">Author Info</h2>
             <h2>@(Model.Author != null ? "Edit Author" : "Add Author")</h2>
 
-            <form asp-action="@(Model.Author !=null? "UpdateAuthors":"AddAuthor")" asp-controller="Author" method="post" enctype="multipart/form-data" id="authorForm">
+            <form asp-action="@(Model.Author !=null? "UpdateAuthor":"AddAuthor")" asp-controller="Author" method="post" enctype="multipart/form-data" id="authorForm">
                @Html.AntiForgeryToken()
                 <div class="mb-3">
                     <label asp-for="Author.AuthorId" class="form-label">Author ID</label>
@@ -48,10 +48,14 @@
                 <div class="mb-3">
                     <label asp-for="Author.AuthorProfile" class="form-label">Author Profile</label>
                     <input type="file" asp-for="Author.AuthorProfile" class="form-control" id="imageFile" name="imageFile" />
+                    @if (Model.Author?.AuthorProfile !=null)
+                    {
+                        <img src="https://localhost:7116/api/Authors/GetAuthorImage?fileName=@Model.Author.AuthorProfile" alt="Author Image" class="img-thumbnail" style="max-width: 100px;" />
+                    }
 
                 </div>
 
-                <button type="submit" class="btn btn-primary">ADD AUTHOR</button>
+                <button type="submit" class="btn btn-primary">@(Model.Author !=null ? "Update Author" : "Add Author")</button>
             </form>
         </div>
     </div>
@@ -89,6 +93,9 @@
                                         <form asp-controller="Author" asp-action="AuthorDashboard" asp-route-authorId="@author.AuthorId" method="get">
                                             <button type="submit" class="btn btn-warning btn-sm">Edit</button>
                                         </form>
+
+                                      
+
 
                                         <form asp-controller="Author" asp-action="DeleteAuthor" method="post">
                                             <input type="hidden" name="Id" value="@author.AuthorId" />

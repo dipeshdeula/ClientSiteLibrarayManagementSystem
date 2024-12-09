@@ -43,6 +43,34 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
             }
             return View();
         }
+
+        [HttpGet("UserDashboard/{UserId}")]
+        public async Task<IActionResult> UserDashboard(int? UserId = null)
+        {
+            var token = _httpContextAccessor.HttpContext?.Session.GetString("JWToken");
+            if (string.IsNullOrEmpty(token))
+            {
+                //If no token is present redirect to login
+                return RedirectToAction("Login", "Account");
+            }
+
+            //fetch users using the token
+            var users = await _authService.GetUsersAsync(token);
+            User? selectedUser = null;
+            if (UserId.HasValue)
+            { 
+                selectedUser = await _authService.GetUserByIdAsync(UserId.Value);
+            }
+
+            var model = new UserViewModel
+            {
+                Users = users,
+                User = selectedUser
+            };
+
+            return View(model);
+        }
+
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Login(User user)
