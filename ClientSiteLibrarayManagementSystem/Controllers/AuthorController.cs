@@ -106,7 +106,7 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
 
         public async Task<IActionResult> UpdateAuthor(AuthorDto author, IFormFile? imageFile)
         {
-            var token = _httpContextAccessor.HttpContext.Session.GetString("JWToken");
+            var token = _httpContextAccessor.HttpContext?.Session.GetString("JWToken");
 
             if (string.IsNullOrEmpty(token))
             {

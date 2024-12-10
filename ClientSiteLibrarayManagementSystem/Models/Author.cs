@@ -3,8 +3,8 @@
     public class Author
     {
         public int AuthorId { get; set; }
-        public string AuthorName { get; set; } = null!;
-        public string Biography { get; set; } = null!;
-        public string AuthorProfile { get; set; } = null!;
+        public string? AuthorName { get; set; } 
+        public string? Biography { get; set; } 
+        public string? AuthorProfile { get; set; }
     }
 }
