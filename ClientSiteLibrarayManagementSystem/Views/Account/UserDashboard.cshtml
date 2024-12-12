@@ -26,7 +26,7 @@
             <h2 class="h4-mb-4">User Info</h2>
             <h2>@(Model.User !=null ? "Edit User":" Add User")</h2>
 
-            <form asp-action="@(Model.User !=null? "UpdateUser":"RegisterUser")" asp-controller="Account" method="post" enctype="multipart/form-data" id="userForm">
+            <form asp-action="@(Model.User !=null? "UpdateUser":"AddUser")" asp-controller="Account" method="post" enctype="multipart/form-data" id="userForm">
                 @Html.AntiForgeryToken()
                 <div class="mb-3">
                     <label asp-for="User.UserID" class="form-label">User ID</label>
@@ -53,6 +53,20 @@
                 </div>
 
                 <div class="mb-3">
+                    <label asp-for="User.UserProfile" class="form-label">User Profile</label>
+                    <input asp-for="User.UserProfile" class="form-control" type="file" id="imageFile" name="imageFile" required />
+
+                    @if (Model.User?.UserProfile != null)
+                    {
+                        <img src="https://localhost:7166/api/Users/GetUserImage?fileName=@Model.User.UserProfile" alt="User Image" class="img-thumbnail" style="max-width:100px;" />    
+                        
+                    }
+
+                </div>
+
+
+
+                <div class="mb-3">
                     <label asp-for="User.Phone" class="form-label">Phone</label>
                     <input asp-for="User.Phone" class="form-control" type="text" id="Phone" name="Phone" required />
 
@@ -62,7 +76,61 @@
                     <input asp-for="User.Role" class="form-control" type="text" id="id" name="UserId" required />
 
                 </div>
+
+                <button type="submit" class="btn btn-primary">@(Model.User !=null ? "Update User":"Add User")</button>
             </form>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h2 class="h4 mb-4">User Details</h2>
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th>User ID</th>
+                            <th>Username</th>
+                            <th>Password</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Role</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="userGrid">
+                        @foreach (var user in Model.Users)
+                        {
+                            var imageUrl = $"https://localhost:7116/api/Users/GetUserImage?fileName={user.UserProfile}";
+                            <tr>
+                                <td>@user.UserName</td>
+                                <td>@user.Password</td>
+                                <td>@user.Email</td>
+                                <td>@user.Phone</td>
+                                <td>@user.Role</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+
+                                        <form asp-controller="Account" asp-action="UserDashboard" asp-route-userId="@user.UserID" method="get">
+                                            <button type="submit" class="btn btn-warning btn-sm">Edit</button>
+                                        </form>
+
+
+                                        <form asp-controller="Account" asp-action="DeleteUser" method="post">
+                                            <input type="hidden" name="Id" value="@user.UserID" />
+                                            <button type="submit" class="btn btn-danger btn-sm ms-1" onclick="return confirm('Are you sure want to delete this author?')">Delete</button>
+                                        </form>
+
+                                    </div>
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

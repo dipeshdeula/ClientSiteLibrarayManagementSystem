@@ -44,33 +44,6 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
             return View();
         }
 
-        [HttpGet("UserDashboard/{UserId}")]
-        public async Task<IActionResult> UserDashboard(int? UserId = null)
-        {
-            var token = _httpContextAccessor.HttpContext?.Session.GetString("JWToken");
-            if (string.IsNullOrEmpty(token))
-            {
-                //If no token is present redirect to login
-                return RedirectToAction("Login", "Account");
-            }
-
-            //fetch users using the token
-            var users = await _authService.GetUsersAsync(token);
-            User? selectedUser = null;
-            if (UserId.HasValue)
-            { 
-                selectedUser = await _authService.GetUserByIdAsync(UserId.Value);
-            }
-
-            var model = new UserViewModel
-            {
-                Users = users,
-                User = selectedUser
-            };
-
-            return View(model);
-        }
-
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Login(User user)
@@ -107,7 +80,34 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
             return View(user);
         }
 
-        [HttpPost("AddUser")]
+        [HttpGet("UserDashboard/{UserId}")]
+        public async Task<IActionResult> UserDashboard(int? UserId = null)
+        {
+            var token = _httpContextAccessor.HttpContext?.Session.GetString("JWToken");
+            if (string.IsNullOrEmpty(token))
+            {
+                //If no token is present redirect to login
+                return RedirectToAction("Login", "Account");
+            }
+
+            //fetch users using the token
+            var users = await _authService.GetUsersAsync(token);
+            User? selectedUser = null;
+            if (UserId.HasValue)
+            {
+                selectedUser = await _authService.GetUserByIdAsync(UserId.Value);
+            }
+
+            var model = new UserViewModel
+            {
+                Users = users,
+                User = selectedUser
+            };
+
+            return View(model);
+        }
+
+        [HttpPost("RegisterUser")]
         public async Task<IActionResult> RegisterUser(UserDto user, IFormFile imageFile)
         {
 
@@ -161,6 +161,55 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
         {
             var user = new UserDto();
             return PartialView("_RegisterUser", user);
+        }
+
+
+        [HttpPost("AddUser")]
+        public async Task<IActionResult> AddUser(UserDto user, IFormFile imageFile)
+        {
+
+            if (!ModelState.IsValid)
+            {
+
+                try
+                {
+                    _logger.LogInformation("ModelState is valid. Calling the API to register the user");
+                    var result = await _authService.AddUserAsync(user, imageFile);
+                    //return Json(result);
+
+                    if (result)
+                    {
+                        _logger.LogInformation("User registered successfully");
+                        TempData["SuccessMessage"] = "User registered successfully";
+                        return RedirectToAction("UserDashboard", "Account");
+                    }
+                    else
+                    {
+                        _logger.LogError("Failed to register the user");
+                        ModelState.AddModelError("", "Failed to register the user");
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "An error occurred while registering the user");
+                    ModelState.AddModelError("", "An error occurred while registering the user");
+                }
+            }
+
+
+
+            else
+            {
+                _logger.LogWarning("ModelState is invalid.");
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    _logger.LogWarning($"ModelState error: {error.ErrorMessage}");
+                }
+            }
+
+
+            return RedirectToAction("UserDashboard");
         }
 
 

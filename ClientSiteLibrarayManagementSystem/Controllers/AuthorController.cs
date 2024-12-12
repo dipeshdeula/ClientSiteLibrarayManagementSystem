@@ -50,7 +50,7 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
         }
 
 
-        [HttpPost]
+   
         [ValidateAntiForgeryToken]
         [HttpPost("AddAuthor")]
         public async Task<IActionResult> AddAuthor(AuthorDto author, IFormFile imageFile, string token)
