@@ -1,0 +1,122 @@
+﻿@model BookViewModel
+@{
+    ViewData["Title"] = "Book Dashboard";
+}
+
+@section Styles {
+    <link href="~/css/Author_Dashboard.css" rel="stylesheet" />
+}
+
+<div class="container py-5">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+        </div>
+
+    }
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h2 class="h4 mb-4">Book Info</h2>
+            <h2>@(Model.Book !=null? "UpdateBook":"AddBook")</h2>
+            <form asp-action="@(Model.Book !=null? "UpdateBook":"AddBook")" asp-controller="Book" method="post" enctype="multipart/form-data" id="bookForm">
+                @Html.AntiForgeryToken()
+                <div class="mb-3">
+                    <label asp-for="Book.BookId" class="form-label">Book Id</label>
+                    <input asp-for="Book.BookId" class="form-control" type="text" id="bookId" name="BookId" required />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Book.Title" class="form-label">Title</label>
+                    <input asp-for="Book.Title" class="form-control" type="text" id="title" name="Title" required />
+
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Book.AuthorId" class="form-label">Author Id</label>
+                    <input asp-for="Book.AuthorId" class="form-control" type="text" id="authorId" name="authorId" required />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Book.Genre" class="form-label">Genre</label>
+                    <input asp-for="Book.Genre" class="form-control" type="text" id="genre" name="genre" required />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Book.ISBN" class="form-label">ISBN</label>
+                    <input asp-for="Book.ISBN" class="form-control" type="text" id="isbn" name="isbn" required />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Book.Quantity" class="form-label">Quantity</label>
+                    <input asp-for="Book.Quantity" class="form-control" type="text" id="Quantity" name="Quantity" required />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Book.AvailabilityStatus" class="form-label">Available Status</label>
+                    <input asp-for="Book.AvailabilityStatus" class="form-control" type="text" id="availableStatus" name="availableStatus" required />
+                </div>
+
+                <button type="submit" class="btn btn-primary">@(Model.Book !=null ? "Update Book" : "Add Book")</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h2 class="h4 mb-4">Book Details</h2>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-secondary">
+                    <tr>
+                        <th>Book Id</th>
+                        <th>Title</th>
+                        <th>AuthorId</th>
+                        <th>Genre</th>
+                        <th>ISBN</th>
+                        <th>Quantity</th>
+                        <th>Available Status</th>
+                        <th>Action</th>
+                   
+                    </tr>
+                    </thead>
+
+                    <tbody id="bookGrid">
+                        @foreach (var book in Model.Books)
+                        {
+                            <tr>
+                                <td>@book.BookId</td>
+                                <td>@book.Title</td>
+                                <td>@book.AuthorId</td>
+                                <td>@book.Genre</td>
+                                <td>@book.ISBN</td>
+                                <td>@book.Quantity</td>
+                                <td>@book.AvailabilityStatus</td>
+
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <form asp-controller="Book" asp-action="BookDashboard" asp-route-bookId = "@book.BookId" method="get">
+                                            <button type="submit" class="btn btn-warning btn-sm">Edit</button>
+                                        </form>
+
+                                        <form asp-controller="Book" asp-action="DeleteBook" method="post">
+                                            <input type="hidden" name="Id" value="@book.BookId" />
+
+                                            <button type="submit" class="btn btn-danger btn-sm ms-1" onclick="return confirm('Are you sure you want to delete this author?')">Delete</button>
+                                        </form>
+                                    </div>
+                                </td>
+
+                            </tr>
+                            
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

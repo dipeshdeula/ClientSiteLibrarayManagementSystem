@@ -1,0 +1,45 @@
+﻿@model UserViewModel
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h2 class="h4-mb-4">User Info</h2>
+        <h2>@(Model.User != null ? "Edit User" : "Add User")</h2>
+
+        <form asp-action="@(Model.User != null ? "UpdateUser" : "AddUser")" asp-controller="User" method="post" enctype="multipart/form-data" id="userForm">
+            @Html.AntiForgeryToken()
+            <div class="mb-3">
+                <label asp-for="User.UserID" class="form-label">User ID</label>
+                <input asp-for="User.UserID" class="form-control" type="text" id="id" name="UserId" required />
+            </div>
+            <div class="mb-3">
+                <label asp-for="User.UserName" class="form-label">Username</label>
+                <input asp-for="User.UserName" class="form-control" type="text" id="userName" name="UserName" required />
+            </div>
+            <div class="mb-3">
+                <label asp-for="User.Password" class="form-label">Password</label>
+                <input asp-for="User.Password" class="form-control" type="text" id="password" name="password" required />
+            </div>
+            <div class="mb-3">
+                <label asp-for="User.Email" class="form-label">Email</label>
+                <input asp-for="User.Email" class="form-control" type="text" id="Email" name="Email" required />
+            </div>
+            <div class="mb-3">
+                <label asp-for="User.UserProfile" class="form-label">User Profile</label>
+                <input asp-for="User.UserProfile" class="form-control" type="file" id="imageFile" name="imageFile" required />
+                @if (Model.User?.UserProfile != null)
+                {
+                    <img src="https://localhost:7116/api/Users/GetUserImage?fileName=@Model.User.UserProfile" alt="User Image" class="img-thumbnail" style="max-width:100px;" />
+                }
+            </div>
+            <div class="mb-3">
+                <label asp-for="User.Phone" class="form-label">Phone</label>
+                <input asp-for="User.Phone" class="form-control" type="text" id="Phone" name="Phone" required />
+            </div>
+            <div class="mb-3">
+                <label asp-for="User.Role" class="form-label">Role</label>
+                <input asp-for="User.Role" class="form-control" type="text" id="Role" name="Role" required />
+            </div>
+            <button type="submit" class="btn btn-primary">@Model.User != null ? "Update User" : "Add User"</button>
+        </form>
+    </div>
+</div>

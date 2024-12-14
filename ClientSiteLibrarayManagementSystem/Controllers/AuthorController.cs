@@ -46,7 +46,8 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
                 Authors = authors,
                 Author = selectedAuthor
             };
-            return View(model);
+            // return View(model);
+            return View("AuthorDashboard", model);
         }
 
 

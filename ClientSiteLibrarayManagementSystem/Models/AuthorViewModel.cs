@@ -2,7 +2,8 @@
 {
     public class AuthorViewModel
     {
-        public Author Author { get; set; } = null!;
         public IEnumerable<Author> Authors { get; set; } = null!;
+        public Author Author { get; set; } = null!;
+       
     }
 }

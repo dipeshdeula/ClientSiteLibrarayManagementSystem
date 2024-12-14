@@ -7,9 +7,9 @@ namespace ClientSiteLibrarayManagementSystem.Services
     public class AuthorService : IAuthorService
     {
         private readonly HttpClient _httpClient;
-        private readonly ILogger<AuthService> _logger;
+        private readonly ILogger<AuthorService> _logger;
 
-        public AuthorService(HttpClient httpClient, ILogger<AuthService> logger)
+        public AuthorService(HttpClient httpClient, ILogger<AuthorService> logger)
         {
             _httpClient = httpClient;
             _logger = logger;
@@ -87,8 +87,8 @@ namespace ClientSiteLibrarayManagementSystem.Services
 
             var formData = new MultipartFormDataContent();
             formData.Add(new StringContent(author.AuthorId.ToString()), "AuthorId");
-            formData.Add(new StringContent(author.AuthorName), "AuthorName");
-            formData.Add(new StringContent(author.Biography), "Biography");
+            formData.Add(new StringContent(author.AuthorName ?? string.Empty), "AuthorName");
+            formData.Add(new StringContent(author.Biography?? string.Empty), "Biography");
 
             if (imageFile != null)
             {
@@ -108,11 +108,11 @@ namespace ClientSiteLibrarayManagementSystem.Services
 
 
 
-            formData.Add(new StringContent(author.AuthorProfile), "AuthorProfile");
+           formData.Add(new StringContent(author.AuthorProfile ?? string.Empty), "AuthorProfile");
 
             _logger.LogInformation("Sending data to API: {@formData}", formData);
 
-            var response = await _httpClient.PutAsync("https://localhost:7116/api/Authors/{author.AuthorId}", formData);
+            var response = await _httpClient.PutAsync($"https://localhost:7116/api/Authors/{author.AuthorId}", formData);
             //return response !=null && response.IsSuccessStatusCode;
 
             if (response.IsSuccessStatusCode)

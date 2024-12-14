@@ -14,20 +14,21 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger<AccountController> _logger;
+        private readonly IUserService _userService;
         private readonly IAuthService _authService;
 
-        public AccountController(IHttpContextAccessor httpContextAccessor,IHttpClientFactory httpClientFactory,ILogger<AccountController> logger,IAuthService authService)
+        public AccountController(IHttpContextAccessor httpContextAccessor,IHttpClientFactory httpClientFactory,ILogger<AccountController> logger,IUserService userService,IAuthService authService)
         {
             _httpContextAccessor = httpContextAccessor;
             _httpClientFactory = httpClientFactory;
             _logger = logger;
+            _userService = userService;
             _authService = authService;
         }
 
         [HttpGet]
         public IActionResult Login()
-        {
-           
+        {        
 
             return View();
         }
@@ -48,7 +49,7 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(User user)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var authenticatedUser = await _authService.AuthenticateAsync(user);
                 if (authenticatedUser != null && !string.IsNullOrEmpty(authenticatedUser.Token))
@@ -80,32 +81,7 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
             return View(user);
         }
 
-        [HttpGet("UserDashboard/{UserId}")]
-        public async Task<IActionResult> UserDashboard(int? UserId = null)
-        {
-            var token = _httpContextAccessor.HttpContext?.Session.GetString("JWToken");
-            if (string.IsNullOrEmpty(token))
-            {
-                //If no token is present redirect to login
-                return RedirectToAction("Login", "Account");
-            }
-
-            //fetch users using the token
-            var users = await _authService.GetUsersAsync(token);
-            User? selectedUser = null;
-            if (UserId.HasValue)
-            {
-                selectedUser = await _authService.GetUserByIdAsync(UserId.Value);
-            }
-
-            var model = new UserViewModel
-            {
-                Users = users,
-                User = selectedUser
-            };
-
-            return View(model);
-        }
+       
 
         [HttpPost("RegisterUser")]
         public async Task<IActionResult> RegisterUser(UserDto user, IFormFile imageFile)
@@ -117,7 +93,7 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
                 try
                 {
                     _logger.LogInformation("ModelState is valid. Calling the API to register the user");
-                    var result = await _authService.AddUserAsync(user, imageFile);
+                    var result = await _userService.AddUserAsync(user, imageFile);
                     //return Json(result);
 
                     if (result)
@@ -164,53 +140,7 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
         }
 
 
-        [HttpPost("AddUser")]
-        public async Task<IActionResult> AddUser(UserDto user, IFormFile imageFile)
-        {
-
-            if (!ModelState.IsValid)
-            {
-
-                try
-                {
-                    _logger.LogInformation("ModelState is valid. Calling the API to register the user");
-                    var result = await _authService.AddUserAsync(user, imageFile);
-                    //return Json(result);
-
-                    if (result)
-                    {
-                        _logger.LogInformation("User registered successfully");
-                        TempData["SuccessMessage"] = "User registered successfully";
-                        return RedirectToAction("UserDashboard", "Account");
-                    }
-                    else
-                    {
-                        _logger.LogError("Failed to register the user");
-                        ModelState.AddModelError("", "Failed to register the user");
-                    }
-
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "An error occurred while registering the user");
-                    ModelState.AddModelError("", "An error occurred while registering the user");
-                }
-            }
-
-
-
-            else
-            {
-                _logger.LogWarning("ModelState is invalid.");
-                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-                {
-                    _logger.LogWarning($"ModelState error: {error.ErrorMessage}");
-                }
-            }
-
-
-            return RedirectToAction("UserDashboard");
-        }
+       
 
 
         [Authorize]

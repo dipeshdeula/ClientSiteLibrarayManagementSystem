@@ -56,6 +56,8 @@ namespace ClientSiteLibrarayManagementSystem
             //Register appliation services
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IAuthorService, AuthorService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IBookService, BookService>();
 
 
 
@@ -108,9 +110,12 @@ namespace ClientSiteLibrarayManagementSystem
 
             app.UseAuthorization();
 
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Account}/{action=Login}/{id?}");
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Account}/{action=Login}/{id?}");
+            });
 
             app.Run();
         }
