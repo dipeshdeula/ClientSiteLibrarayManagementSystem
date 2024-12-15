@@ -27,6 +27,7 @@
                     <thead class="table-secondary">
                         <tr>
                             <th>User ID</th>
+                            <td>User Profile</td>
                             <th>Username</th>
                             <th>Password</th>
                             <th>Email</th>
@@ -41,6 +42,9 @@
                             var imageUrl = $"https://localhost:7116/api/Users/GetUserImage?fileName={user.UserProfile}";
                             <tr>
                                 <td>@user.UserID</td>
+                                <td>
+                                    <img src="@imageUrl" alt="User Image" class="img-thumbnail" style="max-width:100px;" />
+                                </td>
                                 <td>@user.UserName</td>
                                 <td>@user.Password</td>
                                 <td>@user.Email</td>

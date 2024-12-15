@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ClientSiteLibrarayManagementSystem.Controllers
 {
+    [Route("api/[controller]")]
     public class UserController : Controller
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -20,12 +21,13 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
             _userService = userService;
         }
 
-       /* public IActionResult Index()
-        {
-            return View();
-        }
-*/
-        [HttpGet("UserDashboard/{UserId}")]
+        /* public IActionResult Index()
+         {
+             return View();
+         }
+ */
+       
+        [HttpGet("UserDashboard/{UserId?}")]
         public async Task<IActionResult> UserDashboard(int? UserId = null)
         {
             var token = _httpContextAccessor.HttpContext?.Session.GetString("JWToken");
@@ -55,14 +57,14 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
 
         [HttpPost("AddUser")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddUser(UserDto user, IFormFile imageFile)
+        public async Task<IActionResult> AddUser(UserDto user, IFormFile imageFile, string token)
         {
             if (!ModelState.IsValid)
             {
                 try
                 {
                     _logger.LogInformation("ModelState is valid. Calling the API to register the user");
-                    var result = await _userService.AddUserAsync(user, imageFile);
+                    var result = await _userService.AddUserAsync(user, imageFile,token);
 
                     if (result)
                     {

@@ -39,7 +39,7 @@
                 <label asp-for="User.Role" class="form-label">Role</label>
                 <input asp-for="User.Role" class="form-control" type="text" id="Role" name="Role" required />
             </div>
-            <button type="submit" class="btn btn-primary">@Model.User != null ? "Update User" : "Add User"</button>
+            <button type="submit" class="btn btn-primary">@(Model.User != null ? "Update User" : "Add User")</button>
         </form>
     </div>
 </div>

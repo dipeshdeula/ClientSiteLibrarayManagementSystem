@@ -84,7 +84,7 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
        
 
         [HttpPost("RegisterUser")]
-        public async Task<IActionResult> RegisterUser(UserDto user, IFormFile imageFile)
+        public async Task<IActionResult> RegisterUser(UserDto user, IFormFile imageFile,string token)
         {
 
             if (!ModelState.IsValid)
@@ -93,7 +93,7 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
                 try
                 {
                     _logger.LogInformation("ModelState is valid. Calling the API to register the user");
-                    var result = await _userService.AddUserAsync(user, imageFile);
+                    var result = await _userService.AddUserAsync(user, imageFile,token);
                     //return Json(result);
 
                     if (result)
