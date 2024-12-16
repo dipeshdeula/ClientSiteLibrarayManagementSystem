@@ -38,7 +38,8 @@ namespace ClientSiteLibrarayManagementSystem.Services
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var formData = new MultipartFormDataContent();
-            /* formData.Add(new StringContent(user.UserID.ToString()), "UserID");
+            /*
+             formData.Add(new StringContent(user.UserID.ToString()), "UserID");
              formData.Add(new StringContent(user.UserName), "UserName");
              formData.Add(new StringContent(user.Password), "Password");
              formData.Add(new StringContent(user.Email), "Email");
@@ -63,6 +64,7 @@ namespace ClientSiteLibrarayManagementSystem.Services
                     imageContent.Headers.ContentType = new MediaTypeHeaderValue(imageFile.ContentType);
                     formData.Add(imageContent, "UserImage", imageFile.FileName);
 
+                    //set the UserProfile property to the file name or path
                     user.UserProfile = imageFile.FileName;
                 }
             }

@@ -44,24 +44,27 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
             var model = new BookViewModel
             {
                 Books = books,
-                Book = selectedBook
+                Book = selectedBook 
             };
 
             return View("BookDashboard", model);
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
+      
 
         [ValidateAntiForgeryToken]
         [HttpPost("AddBook")]
-        public async Task<IActionResult> AddBook(BookDto book, string token)
+        public async Task<IActionResult> AddBook(BookDto book)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                try {
-                    _logger.LogInformation("ModelState is valid. Calling the API to register the user");
+                var token = _httpContextAccessor.HttpContext?.Session.GetString("JWToken");
+                if (string.IsNullOrEmpty(token))
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+                try
+                {
+                    _logger.LogInformation("ModelState is valid. Calling the API to register the book");
                     var result = await _bookService.AddBookAsync(book, token);
 
                     if (result)
@@ -70,17 +73,16 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
                         TempData["SuccessMessage"] = "Book registered successfully";
                         return RedirectToAction("BookDashboard", "Book");
                     }
-                    else {
-                        _logger.LogError("failed to registered book");
+                    else
+                    {
+                        _logger.LogError("Failed to register book");
                         ModelState.AddModelError("", "An error occurred while registering the book");
                     }
-                   
                 }
-                 catch(Exception ex)
+                catch (Exception ex)
                 {
                     _logger.LogError(ex, "An error occurred while registering the book");
-                    ModelState.AddModelError("", "An error occured while registering the book");
-
+                    ModelState.AddModelError("", "An error occurred while registering the book");
                 }
 
             }

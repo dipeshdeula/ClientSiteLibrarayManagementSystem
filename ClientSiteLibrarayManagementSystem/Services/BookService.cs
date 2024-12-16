@@ -48,7 +48,7 @@ namespace ClientSiteLibrarayManagementSystem.Services
             formData.Add(new StringContent(book.AvailabilityStatus), "AvailabilityStatus");
 
             _logger.LogInformation("sending data to API: {@formData}", formData);
-            var response = await _httpClient.PostAsync("https://localhost:7116/api/Books", formData);
+            var response = await _httpClient.PostAsync("https://localhost:7116/api/Books/", formData);
             if (response.IsSuccessStatusCode)
             {
                 _logger.LogInformation("Book added successfully");

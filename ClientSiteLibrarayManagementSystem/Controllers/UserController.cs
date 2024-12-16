@@ -57,10 +57,15 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
 
         [HttpPost("AddUser")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddUser(UserDto user, IFormFile imageFile, string token)
+        public async Task<IActionResult> AddUser(UserDto user, IFormFile imageFile)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
+                var token = _httpContextAccessor.HttpContext?.Session.GetString("JWToken");
+                if (string.IsNullOrEmpty(token))
+                {
+                    return RedirectToAction("Login", "Account");
+                }
                 try
                 {
                     _logger.LogInformation("ModelState is valid. Calling the API to register the user");
