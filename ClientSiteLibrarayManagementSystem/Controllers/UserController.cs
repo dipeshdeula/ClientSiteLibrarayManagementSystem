@@ -103,9 +103,48 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
 
         [HttpPost("UpdateUser")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateUser(UserDto user, IFormFile imageFile)
+        public async Task<IActionResult> UpdateUser(UserDto user, IFormFile? imageFile)
         {
-            if (ModelState.IsValid)
+            var token = _httpContextAccessor.HttpContext?.Session.GetString("JWToken");
+            if (string.IsNullOrEmpty(token))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            try {
+                //if no new image is uploaded, retain the old image
+                if (imageFile == null)
+                {
+                    var existingUser = await _userService.GetUserByIdAsync(user.UserID);
+                    if (existingUser != null)
+                    {
+                        user.UserProfile = existingUser.UserProfile;
+                    }
+                }
+
+                var result = await _userService.UpdateUserAsync(user, imageFile);
+                if (result)
+                {
+                    TempData["SuccessMessage"] = "Author updated successfully!";
+                    return RedirectToAction("AuthorDashboard");
+                }
+                else
+                {
+
+                    _logger.LogError("Error updating author. Service returned false.");
+                    ModelState.AddModelError("", "Error updating author");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception occured while updating author");
+                ModelState.AddModelError("", "An error occured while updating the author");
+            }
+
+            //return View(author);
+            return RedirectToAction("UserDashboard");
+
+           /* if (ModelState.IsValid)
             {
                 try
                 {
@@ -138,8 +177,8 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
                     _logger.LogWarning($"ModelState error: {error.ErrorMessage}");
                 }
             }
-
-            return RedirectToAction("UserDashboard");
+*/
+            //return RedirectToAction("UserDashboard");
         }
 
         [HttpPost("DeleteUser")]

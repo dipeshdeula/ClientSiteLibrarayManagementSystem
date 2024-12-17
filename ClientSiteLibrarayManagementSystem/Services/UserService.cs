@@ -54,6 +54,7 @@ namespace ClientSiteLibrarayManagementSystem.Services
             formData.Add(new StringContent(user.FullName ?? string.Empty), "FullName");
             formData.Add(new StringContent(user.Phone ?? string.Empty), "Phone");
             formData.Add(new StringContent(user.Role ?? string.Empty), "Role");
+            formData.Add(new StringContent(user.LoginStatus.ToString() ?? string.Empty), "LoginStatus");
 
             if (imageFile != null)
             {
@@ -91,12 +92,13 @@ namespace ClientSiteLibrarayManagementSystem.Services
         {
             var formData = new MultipartFormDataContent();
             formData.Add(new StringContent(user.UserID.ToString()), "UserID");
-            formData.Add(new StringContent(user.UserName), "UserName");
-            formData.Add(new StringContent(user.Password), "Password");
-            formData.Add(new StringContent(user.Email), "Email");
-            formData.Add(new StringContent(user.FullName), "FullName");
-            formData.Add(new StringContent(user.Phone), "Phone");
-            formData.Add(new StringContent(user.Role), "Role");
+            formData.Add(new StringContent(user.UserName ?? string.Empty ), "UserName");
+            formData.Add(new StringContent(user.Password ?? string.Empty), "Password");
+            formData.Add(new StringContent(user.Email ?? string.Empty), "Email");
+            formData.Add(new StringContent(user.FullName ?? string.Empty), "FullName");
+            formData.Add(new StringContent(user.Phone ?? string.Empty), "Phone");
+            formData.Add(new StringContent(user.Role ?? string.Empty), "Role");
+            formData.Add(new StringContent(user.LoginStatus.ToString()), "LoginStatus");
 
             if (imageFile != null)
             {
@@ -111,7 +113,7 @@ namespace ClientSiteLibrarayManagementSystem.Services
                 }
             }
 
-            formData.Add(new StringContent(user.UserProfile), "UserProfile");
+            formData.Add(new StringContent(user.UserProfile ?? string.Empty), "UserProfile");
 
             _logger.LogInformation("Sending data to API: {@formData}", formData);
 

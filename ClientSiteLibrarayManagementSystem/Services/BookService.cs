@@ -46,6 +46,7 @@ namespace ClientSiteLibrarayManagementSystem.Services
             formData.Add(new StringContent(book.Quantity.ToString()), "Quantity");
             formData.Add(new StringContent(book.PublishedDate.ToString()), "PublishedDate");
             formData.Add(new StringContent(book.AvailabilityStatus), "AvailabilityStatus");
+            
 
             _logger.LogInformation("sending data to API: {@formData}", formData);
             var response = await _httpClient.PostAsync("https://localhost:7116/api/Books/", formData);

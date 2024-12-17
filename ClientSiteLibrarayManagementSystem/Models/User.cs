@@ -12,7 +12,7 @@
         public string? Phone { get; set; } = null!;
         public string? Role { get; set; }
 
-        public string? Token { get; set; }
+       // public string? Token { get; set; }
 
         public bool LoginStatus { get; set; } = false;
     }
