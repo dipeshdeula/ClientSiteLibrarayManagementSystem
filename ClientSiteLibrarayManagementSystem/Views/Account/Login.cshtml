@@ -1,7 +1,6 @@
 ﻿@model ClientSiteLibrarayManagementSystem.Models.User
 
 @{
-
     ViewData["Title"] = "Login";
 }
 
@@ -24,41 +23,51 @@
             min-height: 100vh;
             margin: 0;
             font-family: 'Segoe UI', sans-serif;
+            background-color: var(--light-gray);
         }
 
         .login-container {
             min-height: 100vh;
             display: flex;
             flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
         }
 
-        .left-side {
+        .login-card {
+            display: flex;
+            flex-direction: row;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .left-side, .right-side {
             flex: 1;
-            padding: 2rem;
+            padding: 3rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+        }
+
+        .left-side {
             background: white;
         }
 
         .right-side {
-            flex: 1;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
             background: var(--primary-blue);
-            border-top-left-radius: 50px;
-            border-bottom-left-radius: 50px;
             color: white;
         }
 
         .book-logo {
-            width: 100px;
+            width: 120px;
             height: auto;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .right-side .book-logo {
@@ -67,32 +76,34 @@
         }
 
         .form-title {
-            font-size: 1.5rem;
+            font-size: 2rem;
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
         }
 
         .login-form {
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
         }
 
         .form-control {
             background-color: var(--light-gray);
             border: none;
-            padding: 0.8rem;
-            margin-bottom: 1rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
             border-radius: 25px;
+            font-size: 1.1rem;
         }
 
         .btn-login {
             background-color: var(--primary-blue);
             color: white;
             border: none;
-            padding: 0.8rem 2rem;
+            padding: 1rem 2.5rem;
             border-radius: 25px;
             cursor: pointer;
             transition: opacity 0.3s;
+            font-size: 1.1rem;
         }
 
             .btn-login:hover {
@@ -103,11 +114,12 @@
             background-color: var(--light-gray);
             color: var(--primary-blue);
             border: none;
-            padding: 0.8rem 3rem;
+            padding: 1rem 3.5rem;
             border-radius: 25px;
             cursor: pointer;
             transition: opacity 0.3s;
             font-weight: 500;
+            font-size: 1.1rem;
         }
 
             .btn-register:hover {
@@ -117,14 +129,14 @@
         .forgot-password {
             color: #666;
             text-decoration: none;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
             display: inline-block;
         }
 
         .right-side-title {
             font-size: 2.5rem;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
@@ -134,8 +146,8 @@
         }
 
         .book-img-size {
-            width: 344px;
-            height: 234px;
+            width: 120px;
+            height: auto;
         }
 
         .register-form-container {
@@ -173,25 +185,27 @@
 </head>
 <body>
     <div class="login-container" id="loginContainer">
-        <div class="left-side">
-            <img src="~/Images/BookImg.png" alt="Book Logo" class="book-logo book-img-size">
-            <h1 class="form-title">HSMSS Library Management System</h1>
-            <form class="login-form" asp-action="Login" enctype="multipart/form-data" method="post">
-                <input type="text" class="form-control" placeholder="Username" name="UserName" required>
-                <input type="password" class="form-control" placeholder="Password" name="Password" required>
-                <a href="#" class="forgot-password">Forgot Password?</a>
-                <div class="text-center">
-                    <button type="submit" class="btn btn-login">Log In</button>
-                </div>
-            </form>
-        </div>
+        <div class="login-card">
+            <div class="left-side">
+                <img src="~/Images/BookImg.png" alt="Book Logo" class="book-logo book-img-size">
+                <h1 class="form-title">HSMSS Library Management System</h1>
+                <form class="login-form" asp-action="Login" enctype="multipart/form-data" method="post">
+                    <input type="text" class="form-control" placeholder="Username" name="UserName" required>
+                    <input type="password" class="form-control" placeholder="Password" name="Password" required>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-login">Log In</button>
+                    </div>
+                </form>
+            </div>
 
-        <div class="right-side">
-            <img src="~/Images/BookImg.png" alt="Book Logo" class="book-logo text-white book-img-size">
-            <h2 class="right-side-title">HSMSS Library</h2>
-            <p class="register-text">New to our platform?</p>
-            <p class="register-text mb-4">Register Now</p>
-            <button class="btn btn-register" id="registerButton">Register</button>
+            <div class="right-side">
+                <img src="~/Images/BookImg.png" alt="Book Logo" class="book-logo text-white book-img-size">
+                <h2 class="right-side-title">HSMSS Library</h2>
+                <p class="register-text">New to our platform?</p>
+                <p class="register-text mb-4">Register Now</p>
+                <button class="btn btn-register" id="registerButton">Register</button>
+            </div>
         </div>
     </div>
 
