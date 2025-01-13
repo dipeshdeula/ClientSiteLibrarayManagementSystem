@@ -59,6 +59,7 @@ namespace ClientSiteLibrarayManagementSystem
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IBookService, BookService>();
             builder.Services.AddScoped<IBookBorrowService, BookBorrowService>();
+            builder.Services.AddScoped<IBookCopiesService, BookCopiesService>();
 
 
 

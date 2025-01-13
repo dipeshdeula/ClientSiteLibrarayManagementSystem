@@ -28,6 +28,41 @@
             -->
             <form asp-action="AddBorrowBook" asp-controller="BookBorrow" method="post" enctype="multipart/form-data" id="bookBorrowForm">
                 @Html.AntiForgeryToken()
+               @*  <div class="mb-3">
+                    <label asp-for="BookBorrow.BorrowId" class="form-label">Borrow Id</label>
+                    <input asp-for="BookBorrow.BorrowId" class="form-control" type="text" id="borrowId" name="BorrowId" required />
+                </div> *@
+
+                <div class="mb-3">
+                    <label asp-for="BookBorrow.UserId" class="form-label">User Id</label>
+                    <input asp-for="BookBorrow.UserId" class="form-control" type="text" id="userId" name="UserId" required />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="BookBorrow.Barcode" class="form-label">Barcode</label>
+                    <input asp-for="BookBorrow.Barcode" class="form-control" type="text" id="barcode" name="Barcode" required />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="BookBorrow.BorrowDate" class="form-label">Borrow Date</label>
+                    <input asp-for="BookBorrow.BorrowDate" class="form-control" type="datetime-local" id="borrowDate" name="BorrowDate" required />
+                </div>
+
+@*                 <button type="submit" class="btn btn-primary">@Model.BookBorrow != null ? "Update Borrow Book" : "Add Borrow Book"</button>
+ *@   
+                     <button type="submit" class="btn btn-primary">Issue</button>
+
+</form>
+        </div>
+    </div>
+
+    <!--Return Borrow Books-->
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h2 class="h4 mb-4">Return Books</h2>
+          
+            <form asp-action="AddBorrowBook" asp-controller="ReturnBookBorrow" method="post" enctype="multipart/form-data" id="bookBorrowForm">
+                @Html.AntiForgeryToken()
                 <div class="mb-3">
                     <label asp-for="BookBorrow.BorrowId" class="form-label">Borrow Id</label>
                     <input asp-for="BookBorrow.BorrowId" class="form-control" type="text" id="borrowId" name="BorrowId" required />
@@ -47,11 +82,17 @@
                     <input asp-for="BookBorrow.BorrowDate" class="form-control" type="datetime-local" id="borrowDate" name="BorrowDate" required />
                 </div>
 
-@*                 <button type="submit" class="btn btn-primary">@Model.BookBorrow != null ? "Update Borrow Book" : "Add Borrow Book"</button>
- *@   
-                     <button type="submit" class="btn btn-primary">Add Borrow Book</button>
+                <div class="mb-3">
+                    <label asp-for="BookBorrow.ReturnDate" class="form-label">Return Date</label>
+                    <input asp-for="BookBorrow.ReturnDate" class="form-control" type="datetime-local" id="returnDate" name="returnDate" required />
+                </div>
 
-</form>
+                @*                 <button type="submit" class="btn btn-primary">@Model.BookBorrow != null ? "Update Borrow Book" : "Add Borrow Book"</button>
+ *@   
+                     <button type="submit" class="btn btn-primary">Return</button>
+
+            </form>
         </div>
     </div>
+
 </div>

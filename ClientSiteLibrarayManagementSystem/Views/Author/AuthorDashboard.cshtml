@@ -91,7 +91,7 @@
                                     <div class="btn-group" role="group">
 
                                         <form asp-controller="Author" asp-action="AuthorDashboard" asp-route-authorId="@author.AuthorId" method="get">
-                                            <button type="submit" class="btn btn-warning btn-sm">Edit</button>
+                                            <button type="submit" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i></button>
                                         </form>
 
                                       
@@ -100,7 +100,7 @@
                                         <form asp-controller="Author" asp-action="DeleteAuthor" method="post">
                                             <input type="hidden" name="Id" value="@author.AuthorId" />
                                             <button type="submit" class="btn btn-danger btn-sm ms-1"
-                                            onclick="return confirm('Are you sure you want to delete this author?')">Delete</button>
+                                            onclick="return confirm('Are you sure you want to delete this author?')"><i class="bi bi-trash"></i></button>
                                         </form>
                                       
                                        @*  <a asp-action="AuthorDelete" asp-route-id="@author.AuthorId"

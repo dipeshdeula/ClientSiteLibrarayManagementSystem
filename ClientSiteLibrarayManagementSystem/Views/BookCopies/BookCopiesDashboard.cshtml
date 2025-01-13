@@ -1,0 +1,96 @@
+﻿@model BookCopiesViewModel
+@{
+    ViewData["Title"] = "Book Copies Dashboard";
+}
+
+@section Styles{
+    <link href="~/css/Author_Dashboard.css" rel="stylesheet" />
+}
+
+<div class="container py-5">
+    @if (TempData["SuccessMessage"] != null)
+    { 
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h2>@(Model.BookCopy !=null? "Update Book Copies" : "Add Book Copies")</h2>
+            <form asp-action="@(Model.BookCopy !=null? "UpdateBookCopies":"AddBookCopies")" asp-controller="BookCopies" method="post" enctype="multipart/form-data" id="bookCopiesFomr">
+                @Html.AntiForgeryToken()
+                <div class="mb-3">
+                    <label asp-for="BookCopy.BookId" class="form-label">BookId</label>
+                    <input asp-for="BookCopy.BookId" class="form-control" list="bookIds" type="text" id="BookId" required />
+                    <datalist id="bookIds">
+                        @foreach (var bookId in Model.BooksId)
+                        { 
+                            <option value="@bookId"></option>
+                        }
+                    </datalist>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="BookCopy.Barcode" class="form-label">Barcode</label>
+                    <input asp-for="BookCopy.Barcode" class="form-control" type="text" id="Barcode" required />
+                </div>
+
+                <button type="submit" class="btn btn-primary">@(Model.BookCopy != null ? "Update Book Copies" : "Add Book Copies")</button>
+
+
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h2 class="h4 mb-4">Book Copy Details</h2>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th>Barcode</th>
+                            <th>BookId</th>
+                           @*  <th>Quantity</th> *@
+                            <th>IsAvailable</th>
+                            <th>IsDeleted</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="bookCopiesGrid">
+                        @foreach (var booksCopy in Model.BooksCopies)
+                        { 
+                            <tr>
+                                <td>@booksCopy.Barcode</td>
+                                <td>@booksCopy.BookId</td>
+                               @*  <td>@booksCopy.Quantity</td> *@
+                                <td>@booksCopy.IsAvailable</td>
+                                <td>@booksCopy.IsDeleted</td>
+                                
+
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <form asp-controller="BookCopies" asp-action="BookCopiesDashboard" asp-route-bookId="@booksCopy.Barcode" method="get">
+                                            <button type="submit" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i></button>
+                                        </form>
+
+                                        <form asp-controller="BookCopies" asp-action="DeleteBookCopies" method="post">
+                                            <input type="hidden" name="Id" value="@booksCopy.BookId" />
+
+                                            <button type="submit" class="btn btn-danger btn-sm ms-1" onclick="return confirm('Are you sure you want to delete this author?')"><i class="bi bi-trash"></i></button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+
+                       
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
