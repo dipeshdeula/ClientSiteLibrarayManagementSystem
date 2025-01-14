@@ -58,7 +58,8 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
                     {
                         new Claim(ClaimTypes.Name, authenticatedUser.UserName ?? string.Empty),
                         new Claim(ClaimTypes.Email, authenticatedUser.Email ?? string.Empty),
-                        new Claim(ClaimTypes.Role, authenticatedUser.Role ?? string.Empty)
+                        new Claim(ClaimTypes.Role, authenticatedUser.Role ?? string.Empty),
+                        new Claim(ClaimTypes.NameIdentifier,authenticatedUser.UserID.ToString())
                     };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -81,7 +82,7 @@ namespace ClientSiteLibrarayManagementSystem.Controllers
             return View(user);
         }
 
-       
+  
 
         [HttpPost("RegisterUser")]
         public async Task<IActionResult> RegisterUser(UserDto user, IFormFile imageFile,string token)

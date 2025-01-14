@@ -1,0 +1,37 @@
+﻿@model ClientSiteLibrarayManagementSystem.Models.User
+
+<div class="user-details">
+    <div class="user-profile">
+        <img src="https://localhost:7116/api/Users/GetUserImage?fileName=@Model.UserProfile" alt="User Profile" class="img-thumbnail" style="max-width: 100px;" />
+    </div>
+    <div class="user-info">
+        <h5>@Model.UserName</h5>
+        <p>@Model.Role</p>
+    </div>
+</div>
+
+<style>
+    .user-details {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .user-profile img {
+        border-radius: 50%;
+    }
+
+    .user-info h5 {
+        margin: 0;
+        font-size: 1.25rem;
+        color: white;
+    }
+
+    .user-info p {
+        margin: 0;
+        font-size: 1rem;
+        color: white;
+    }
+</style>

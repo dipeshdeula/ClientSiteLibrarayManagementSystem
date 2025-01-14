@@ -33,7 +33,16 @@ namespace ClientSiteLibrarayManagementSystem.Services
             }
             return user;
         }
-
+        public async Task<User> GetUserByUserNameAsync(string userName, string token)
+        {
+            var users = await GetUsersAsync(token);
+            var user = users.FirstOrDefault(u => u.UserName == userName);
+            if (user == null)
+            {
+                throw new KeyNotFoundException("User not found");
+            }
+            return user;
+        }
         public async Task<bool> AddUserAsync(UserDto user, IFormFile imageFile,string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
